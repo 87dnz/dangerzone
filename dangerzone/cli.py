@@ -121,12 +121,15 @@ def cli_main(
 
     # Validate OCR language
     if ocr_lang:
-        valid = False
-        for lang in dangerzone.ocr_languages:
-            if dangerzone.ocr_languages[lang] == ocr_lang:
-                valid = True
-                break
-        if not valid:
+        valid_count = 0
+        ocr_lang = ocr_lang.strip("+")
+        ocr_lang_multi = ocr_lang.split("+")
+        for ocr_lang_single in ocr_lang_multi:
+            for lang in dangerzone.ocr_languages:
+                if dangerzone.ocr_languages[lang] == ocr_lang_single:
+                    valid_count += 1
+                    break
+        if not valid_count == len(ocr_lang_multi):
             click.echo("Invalid OCR language code. Valid language codes:")
             for lang in dangerzone.ocr_languages:
                 click.echo(f"{dangerzone.ocr_languages[lang]}: {lang}")
